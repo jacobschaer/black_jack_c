@@ -1,4 +1,4 @@
-This is the "money example" from the Check tutorial.
+This is a work in progress BlackJack C implementation. This is an experiment with TDD in C.
 
 You need the following programs installed on your system:
   -- Autoconf 2.59
@@ -6,19 +6,9 @@ You need the following programs installed on your system:
   -- Libtool 1.5.22
   -- Check 0.9.3 
 
-Somewhat earlier versions of these programs might work.
-
-Then, do as follows:
+To Install:
 
 $ autoreconf --install
 $ ./configure
 $ make
 $ make check
-
-Don't do "make install" unless you want to install the money example.
-
-money.c and money.h are built as a library.  src/main.c:main() is a
-client of libmoney.la, just as tests/check_money.c:main() is a client
-of libmoney.la
-
-Please send bug reports to check-devel AT lists.sourceforge.net.
