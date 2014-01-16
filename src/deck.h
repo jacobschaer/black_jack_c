@@ -19,7 +19,7 @@ typedef struct {
 
 
 Deck* new_deck();
-void delete_deck(Deck* my_deck;);
+void delete_deck(Deck* my_deck);
 void deck_push_card(Deck* my_deck, Card* my_card);
 Card* deck_pop_card(Deck* my_deck);
 

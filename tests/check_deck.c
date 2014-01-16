@@ -24,7 +24,6 @@ START_TEST (can_add_a_card_to_a_deck)
   Card* card = new_card(0,1);
   deck_push_card(a, card);
   ck_assert_msg(a->top->card->value == 1, "Failed to Properly Set Card Value");
-  delete_card(card);
   delete_deck(a);
 }
 END_TEST
