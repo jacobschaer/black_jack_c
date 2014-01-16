@@ -3,52 +3,71 @@
 #include <string.h>
 #include "../src/deck.h"
 
+Deck *sut;
+
+void setup(void) {
+  sut = new_deck();
+}
+
+void teardown(void) {
+  delete_deck(sut);
+}
+
 START_TEST (can_get_a_new_deck)
 {
-  Deck* a = new_deck();
-  ck_assert_msg(a->count == 0, "Failed to Properly Initialize Deck");
+  ck_assert_msg(sut->count == 0, "Failed to Properly Initialize Deck");
 }
 END_TEST
 
 START_TEST (new_deck_has_null_top)
 {
-  Deck* a = new_deck();
-  ck_assert_msg(a->top == NULL, "Top Of New Deck Was Non-Null");
-  delete_deck(a);
+  ck_assert_msg(sut->top == NULL, "Top Of New Deck Was Non-Null");
 }
 END_TEST
 
 START_TEST (can_add_a_card_to_a_deck)
 {
-  Deck* a = new_deck();
-  Card* card = new_card(0,1);
-  deck_push_card(a, card);
-  ck_assert_msg(a->top->card->value == 1, "Failed to Properly Set Card Value");
-  delete_deck(a);
+  Card *card = new_card(0,1);
+  deck_push_card(sut, card);
+  ck_assert_msg(sut->top->card->value == 1, "Failed to Properly Set Card Value");
 }
 END_TEST
 
 START_TEST (deck_is_updated_when_card_added)
 {
-  Deck* a = new_deck();
-  Card* card = (Card*) malloc(sizeof(Card));
-  card->suit = 1;
-  card->value = 1;
-  deck_push_card(a, card);
-  ck_assert_msg(a->sum == 1, "Failed to Properly Increment Sum On Update");
+  Card *card = new_card(1,1);
+  deck_push_card(sut, card);
+  ck_assert_msg(sut->sum == 1, "Failed to Properly Increment Sum On Update");
+}
+END_TEST
+
+START_TEST (deck_is_updated_when_two_cards_are_added)
+{
+  Card *card1 = new_card(1,1);
+  Card *card2 = new_card(2,2);
+  deck_push_card(sut, card1);
+  deck_push_card(sut, card2);
+  ck_assert_msg(sut->sum == (1 + 2), "Failed to Properly Increment Sum On Update");
+}
+END_TEST
+
+START_TEST (deck_is_updated_when_card_removed_from_deck)
+{
+  Card *card1 = new_card(1,1);
+  Card *card2 = new_card(2,2);
+  deck_push_card(sut, card1);
+  deck_push_card(sut, card2);
+  deck_pop_card(sut);
+  ck_assert_msg(sut->sum == (1), "Failed to Properly Increment Sum On Update");
 }
 END_TEST
 
 START_TEST (valid_card_is_returned_from_deck)
 {
-  Deck* a = new_deck();
-  Card* card = (Card*) malloc(sizeof(Card));
-  card->suit = 1;
-  card->value = 1;
-  deck_push_card(a, card);
-  Card* top_card = deck_pop_card(a);
+  Card *card = new_card(1,1);
+  deck_push_card(sut, card);
+  Card *top_card = deck_pop_card(sut);
   ck_assert_msg(top_card->value == 1, "Failed to Retrieve Top Card");
-
 }
 END_TEST
 
@@ -61,13 +80,14 @@ deck_suite (void)
 
   /* Core test case */
   TCase *tc_core = tcase_create ("Core");
+  tcase_add_checked_fixture (tc_core, setup, teardown);
   tcase_add_test (tc_core, can_get_a_new_deck);
   tcase_add_test (tc_core, new_deck_has_null_top);
   tcase_add_test (tc_core, can_add_a_card_to_a_deck);
   tcase_add_test (tc_core, deck_is_updated_when_card_added);
   tcase_add_test (tc_core, valid_card_is_returned_from_deck);
-
-
+  tcase_add_test (tc_core, deck_is_updated_when_card_removed_from_deck);
+  
   suite_add_tcase (s, tc_core);
 
   return s;

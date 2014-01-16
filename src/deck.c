@@ -50,9 +50,13 @@ Card* deck_pop_card(Deck* my_deck) {
 		Card *retval = my_deck->top->card;
 		if (my_deck->top->previous != NULL) {
 			my_deck->top = (DeckNode*)my_deck->top->previous;
+			my_deck->sum -= retval->value;
+			my_deck->count--;
 		}
 		else {
 			my_deck->top = NULL;
+			my_deck->sum = 0;
+			my_deck->count = 0;
 		}
 		return retval;
 	}
