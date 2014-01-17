@@ -3,6 +3,9 @@
 
 #include "deck.h"
 
+#define PLAYER1 1;
+#define PLAYER2 2;
+
 typedef struct {
 	struct Deck *player_one_hand;
 	struct Deck *player_two_hand;
