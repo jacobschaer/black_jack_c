@@ -22,6 +22,19 @@ void delete_deck(Deck* my_deck) {
 	}
 }
 
+Deck* clone_deck(Deck* my_deck) {
+	Deck *retval = new_deck();
+	DeckNode *my_card = my_deck->top;
+	int suit, value;
+	do {
+		suit = my_card->card->suit;
+		value = my_card->card->value;
+		deck_push_card(retval, new_card(suit, value));
+	}
+	while ((my_card = my_card->below) != NULL);
+	return retval;
+}
+
 void deck_push_card(Deck* my_deck, Card* my_card) {
 	DeckNode* new_node = malloc(sizeof(DeckNode));
 	DeckNode* former_top_node = (DeckNode*)my_deck->top;
@@ -44,8 +57,41 @@ void deck_push_card(Deck* my_deck, Card* my_card) {
 	my_deck->sum += my_card->value;
 }
 
+DeckNode* get_nth_node(Deck* my_deck, int n) {
+	DeckNode *curr_node = my_deck->top;
+	int i = 0;
+	for (i; i<n; i++) {
+		curr_node = (DeckNode *)(curr_node->below);
+		if (curr_node == NULL) {
+			break;
+		}
+	}
+	return curr_node;
+}
+
+void deck_swap_cards(Deck* deck, DeckNode* node1, DeckNode* node2) {
+	Card* temp = node1->card;
+	node1->card = node2->card;
+	node2->card = temp;
+}
+
+int _uniform_distribution(int rangeLow, int rangeHigh)
+{
+    int range = rangeHigh - rangeLow;
+    return ((rand()%range) + rangeLow);
+}
+
+
 void deck_shuffle(Deck* my_deck) {
-	printf("\n\nShuffling...\n\n");
+	int i = 0 ,
+		j = 0,
+		n = my_deck->count;
+
+    srand(time(NULL));
+    for (i; i < n; i++) {
+       j = _uniform_distribution(i, 52);
+       deck_swap_cards(my_deck, get_nth_node(my_deck, i), get_nth_node(my_deck, j));
+    }
 }
 
 Deck* new_complete_deck() {
@@ -53,7 +99,7 @@ Deck* new_complete_deck() {
 	int suit, value;
 
 	for(suit = 0; suit<4; suit++) {
-		for(value = 1; value <=13; value++) {
+		for(value = 2; value <=14; value++) {
 			Card *curr_card = new_card(suit,value);
 			deck_push_card(target_deck, curr_card);
 		}
@@ -79,50 +125,4 @@ Card* deck_pop_card(Deck* my_deck) {
 		}
 		return retval;
 	}
-}
-
-void deck_swap_cards(Deck* deck, DeckNode* node1, DeckNode* node2) {
-	Card* temp = node1->card;
-	node1->card = node2->card;
-	node2->card = temp;
-
-	// /* IF THERE IS SOME REASON FOR DEEP SWAPPING */
-	// DeckNode* temp;
-
-	// /* Swap 'below' */
-	// temp = node1->below;
-	// node1->below = node2->below;
-	// node2->below = temp;
-
-	// /* Swap 'above' */
-	// temp = node1->above;
-	// node1->above = node2->above;
-	// node2->above = temp;
-
-	// /* Reset 'top' of deck */
-
-	// if (node1->above == NULL) {
-	// 	deck->top = node1;
-	// }
-	// else if(node2->above == NULL) {
-	// 	deck->top = node2;
-	// }
-
-	// /* Fix 'below' nodes */
-	
-	// if(node1->below != NULL) {
-	// 	((DeckNode*)node1->below)->above = node2;
-	// }
-	// if(node2->below != NULL) {
-	// 	((DeckNode*)node2->below)->above = node1;
-	// }
-
-	// /* Fix 'above' nodes */
-	// if(node1->above != NULL) {
-	// 	((DeckNode*)node1->above)->below = node2;
-	// }
-	// if(node2->above != NULL) {
-	// 	((DeckNode*)node2->above)->below = node1;
-	// }
-
 }

@@ -9,10 +9,7 @@ Game* new_game() {
 	retval->player_one_hand = new_deck();
 	retval->player_two_hand = new_deck();
 	Deck *table_deck = new_complete_deck();
-
-	int suit, value;
-
+	deck_shuffle(table_deck);
 	retval->table_deck = table_deck;
-
 	return retval;
 }

@@ -4,6 +4,8 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "card.h"
+#include <time.h>
+#include <stdlib.h>
 
 typedef struct {
 	struct DeckNode *above;
@@ -24,7 +26,8 @@ void deck_push_card(Deck* my_deck, Card* my_card);
 void deck_shuffle(Deck* my_deck);
 Deck* new_complete_deck();
 Card* deck_pop_card(Deck* my_deck);
-
+Deck* clone_deck(Deck* my_deck);
+int _uniform_distribution(int rangeLow, int rangeHigh);
 void deck_swap_cards(Deck* deck, DeckNode* node1, DeckNode* node2);
 
 #endif /* DECK_H */
